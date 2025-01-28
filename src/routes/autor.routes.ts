@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AppDataSource } from '../database/data-source';
-import Author from '../entities/Autor';
+import Author from '../entities/User';
 import rotaAutenticada from '../middlewares/auth';
 import bcrypt from 'bcrypt';
 
