@@ -118,7 +118,12 @@ userRoutes.post('/login', async (req, res) => {
     const senhaValida = await bcrypt.compare(password, user.password);
 
     if (senhaValida) {
-      return res.status(200).json({ message: 'Usuário autenticado' });
+      return res
+        .status(200)
+        .json({
+          message: 'Usuário autenticado',
+          token: bcrypt.hashSync(user.email, 10),
+        });
     } else {
       return res.status(400).json({ message: 'Senha incorreta' });
     }
