@@ -103,4 +103,30 @@ userRoutes.delete('/:id', rotaAutenticada, async (req, res) => {
   }
 });
 
+userRoutes.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await AppDataSource.getRepository(User).findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Usuário não encontrado' });
+    }
+
+    const senhaValida = await bcrypt.compare(password, user.password);
+
+    if (senhaValida) {
+      return res.status(200).json({ message: 'Usuário autenticado' });
+    } else {
+      return res.status(400).json({ message: 'Senha incorreta' });
+    }
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: 'Erro ao autenticar usuário', error: error.message });
+  }
+});
+
 export default userRoutes;
