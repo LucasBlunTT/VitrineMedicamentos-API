@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import { AppDataSource } from './database/data-source';
 import userRoutes from './routes/user.routes';
+import medicamentoRoutes from './routes/medicamento.routes';
 
 const app = express();
 
@@ -25,6 +26,7 @@ AppDataSource.initialize()
   .catch(() => console.log('Erro ao conectar com o banco de dados'));
 
 app.use('/users', userRoutes);
+app.use('/medicamentos', medicamentoRoutes);
 
 app.listen(3333, () => {
   console.log('Servidor rodando na porta 3333');
