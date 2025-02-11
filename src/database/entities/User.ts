@@ -7,7 +7,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import Medicamento from './Medicamento';
-import Role from './Role';
+import Role from '../../entities/Role';
 
 @Entity('user')
 export default class User {
@@ -23,21 +23,12 @@ export default class User {
   @Column({ nullable: false })
   password!: string;
 
-  @Column({ default: true })
-  active!: boolean;
-
-  @Column({ default: new Date() })
-  created_at!: Date;
-
-  @Column({ nullable: true })
-  updated_at!: Date;
+  @ManyToMany(() => Role, role => role.users)
+  @JoinTable({ name: 'author_roles' })
+  roles!: Role[];
 
   @OneToMany(() => Medicamento, medicamento => medicamento.user, {
     cascade: true,
-  })
-  medicamentos!: Medicamento[];
-
-  @ManyToMany(() => Role, role => role.users)
-  @JoinTable({ name: 'user_roles' })
-  roles!: Role[];
+  }) // Relacionamento OneToMany com Medicamento
+  medicamentos!: Medicamento[]; // Propriedade para armazenar os medicamentos associados ao usuário
 }

@@ -21,15 +21,6 @@ export default class Medicamento {
   @Column()
   quantidade!: number;
 
-  @Column({ default: true })
-  active!: boolean;
-
-  @Column({ default: new Date() })
-  created_at!: Date;
-
-  @Column({ nullable: true })
-  updated_at!: Date;
-
   @ManyToOne(() => User, user => user.medicamentos, { onDelete: 'CASCADE' }) // Relacionamento ManyToOne com User
   @JoinColumn({ name: 'user_id' }) // Define o nome da coluna de chave estrangeira
   user!: User;

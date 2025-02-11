@@ -1,11 +1,14 @@
+require('dotenv').config();
 import 'reflect-metadata';
-import express, { NextFunction } from 'express';
-import { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
-
 import { AppDataSource } from './database/data-source';
 import userRoutes from './routes/user.routes';
 import medicamentoRoutes from './routes/medicamento.routes';
+import rbacRoutes from './routes/rbac.routes';
+import Role from './entities/Role';
+import Permission from './entities/Permission';
+import authRoutes from './routes/auth.routes';
 
 const app = express();
 
@@ -13,20 +16,18 @@ app.use(cors());
 
 app.use(express.json());
 
-// Uso do Middleware global
-/*app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log('Middleware global');
-  next();
-});*/
-
 AppDataSource.initialize()
   .then(async () => {
     console.log('Sua conexão com banco de dados está ok');
   })
-  .catch(() => console.log('Erro ao conectar com o banco de dados'));
+  .catch(error => {
+    console.error(error);
+  });
 
 app.use('/users', userRoutes);
 app.use('/medicamentos', medicamentoRoutes);
+app.use('/rbac', rbacRoutes);
+app.use('/login', authRoutes);
 
 app.listen(3333, () => {
   console.log('Servidor rodando na porta 3333');
